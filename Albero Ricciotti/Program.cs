@@ -60,6 +60,7 @@ namespace Albero_Ricciotti
                         sx = new AlberoBinarioIntero();
                     }
                     sx.depth = this.depth + 1;
+                    dx.depth = this.depth + 1;
                     if (sx.depth > depthMax)
                     {
                         depthMax = sx.depth;
@@ -74,6 +75,7 @@ namespace Albero_Ricciotti
                         sx = new AlberoBinarioIntero();
                     }
                     dx.depth = this.depth + 1;
+                    sx.depth = this.depth + 1;
                     if (dx.depth > depthMax)
                     {
                         depthMax = dx.depth;
@@ -86,50 +88,100 @@ namespace Albero_Ricciotti
             public override string ToString()
             {
 
-                Stack<AlberoBinarioIntero> pila = new Stack<AlberoBinarioIntero>();
+                #region Ampiezza
+                Queue<AlberoBinarioIntero> coda = new Queue<AlberoBinarioIntero>();
                 AlberoBinarioIntero testa = this;
                 AlberoBinarioIntero prec = null;
-                pila.Push(testa);
-                string s = "";
-                int conta = 0;
-                while (pila.Count > 0)
+                coda.Enqueue(testa);
+                string s = " Se il numero è all'interno di una parentesi vuol dire che posside dei figli\n";
+                int livello = 0;
+
+                while (coda.Count > 0)
                 {
 
-                    testa = pila.Pop();
-                    if (testa.sx == null && prec.sx!=testa && s!="")
+
+                    testa = coda.Dequeue();
+
+
+                    if (testa.depth != livello)
                     {
-                        s += testa.val + ")";
-                        for (int i = 0; i < conta-1 && pila.Count<2 ; i++)
-                        {
-                            s += ")";
-                        }
-                        conta = 0;
+                        s += "\n";
+                        livello++;
                     }
-                    else
+
+                    if (testa.dx != null || testa.sx != null)
                     {
-                        s += testa.val + " ";
+                        s += "(" + testa.val + ") ";
+                    }
+                    else { s += testa.val + " "; }
+
+
+                    if (testa.sx != null)
+                    {
+                        s += "";
+                        coda.Enqueue(testa.sx);
                     }
                     if (testa.dx != null)
                     {
-                        
-                        pila.Push(testa.dx);
+
+                        coda.Enqueue(testa.dx);
                         prec = testa;
-                        conta++;
+
 
                     }
-                    if (testa.sx != null)
-                    {
-                        s += "(";
-                        pila.Push(testa.sx);
-                    }
-                    s += "";
+                    //s += "";
 
                 }
+                return s + "";
 
-                return  s+")";
+                #endregion
 
+                #region Profondita
+                //Stack<AlberoBinarioIntero> pila = new Stack<AlberoBinarioIntero>();
+                //AlberoBinarioIntero testa = this;
+                //AlberoBinarioIntero prec = null;
+                //pila.Push(testa);
+                //string s = "";
+                //int conta = 0;
+                //while (pila.Count > 0)
+                //{
 
+                //    testa = pila.Pop();
+                //    if (testa.sx == null && prec.sx!=testa && s!="")
+                //    {
+                //        s += testa.val + ")";
+                //        for (int i = 0; i < conta-1 && pila.Count<2 ; i++)
+                //        {
+                //            s += ")";
+                //        }
+                //        conta = 0;
+                //    }
+                //    else
+                //    {
+                //        s += testa.val + " ";
+                //    }
+                //    if (testa.dx != null)
+                //    {
 
+                //        pila.Push(testa.dx);
+                //        prec = testa;
+                //        conta++;
+
+                //    }
+                //    if (testa.sx != null)
+                //    {
+                //        s += "(";
+                //        pila.Push(testa.sx);
+                //    }
+                //    s += "";
+
+                //}
+
+                //return  s+")";
+
+                #endregion
+
+                #region Ricorsivo
                 //if (dx != null && sx != null)
                 //{
                 //    return this.val + "(" + sx + "," + dx + ")";
@@ -147,6 +199,7 @@ namespace Albero_Ricciotti
                 //{
                 //    return this.val + "(" + 0 + "," + dx + ")";
                 //}
+                #endregion
             }
         }
     }
